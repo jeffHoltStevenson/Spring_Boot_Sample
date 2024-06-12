@@ -2,13 +2,13 @@ package com.example.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @SpringBootApplication
 public class ServiceApplication {
@@ -32,12 +32,11 @@ class CustomerHttpController {
 	Collection<Customer> customers() {
 		return this.repository.findAll();
 	}
-}
 
-interface CustomerRepository extends ListCrudRepository<Customer, Integer> {
-
-}
-record Customer (@Id Integer id, String name) {
-
+	@GetMapping("/customer/{id}")
+	public Customer getCustomerById(@PathVariable Integer id) {
+		Optional<Customer> customer = repository.findById(id);
+		return customer.orElse(null);
+	}
 }
 
